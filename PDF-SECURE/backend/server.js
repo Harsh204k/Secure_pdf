@@ -9,7 +9,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ["https://vercel.com/harshs-projects-f860a6fa/secure-pdf-backend", "http://localhost:5173"],
+    origin: ["https://secure-pdf-frontend.vercel.app", "http://localhost:5173", "https://vercel.com/harshs-projects-f860a6fa/secure-pdf-backend"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));

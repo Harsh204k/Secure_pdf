@@ -14,10 +14,11 @@ import { useSecurityLayers } from '../hooks/useSecurityLayers';
 
 // Set worker source locally to avoid CDN/CORS issues
 import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import API_URL from '../config/api';
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 // API Base URL
-const API_BASE = 'http://localhost:5000';
+const API_BASE = API_URL;
 
 /**
  * SecureViewer Component

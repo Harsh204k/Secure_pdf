@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import React from 'react';
+import API_URL from '../config/api';
 
 const JoinGroup = () => {
     const { inviteCode } = useParams();
@@ -15,7 +16,7 @@ const JoinGroup = () => {
             if (!currentUser) return; // Wait for auth
             try {
                 const token = await currentUser.getIdToken();
-                const res = await axios.post('http://localhost:5000/api/groups/join',
+                const res = await axios.post(`${API_URL}/api/groups/join`,
                     { inviteCode },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );

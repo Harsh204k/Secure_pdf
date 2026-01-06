@@ -3,6 +3,8 @@ import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import React from 'react';
+import API_URL from '../config/api';
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -18,7 +20,7 @@ export const AuthProvider = ({ children }) => {
                 // Sync user with backend
                 try {
                     const token = await user.getIdToken();
-                    await axios.post('http://localhost:5000/api/auth/sync', {}, {
+                    await axios.post(`${API_URL}/api/auth/sync`, {}, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                 } catch (error) {
