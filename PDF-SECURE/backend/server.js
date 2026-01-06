@@ -7,23 +7,16 @@ dotenv.config();
 
 const app = express();
 
-// Handle Preflight Requests explicitly
-app.options('*', cors());
-
-// Debug Middleware to log requests
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
-    next();
-});
 
 // Middleware
 const allowedOrigins = [
     "https://secure-pdf-frontend.vercel.app",
     "http://localhost:5173",
-    "https://vercel.com/harshs-projects-f860a6fa/secure-pdf-backend"
+    "https://vercel.com/harshs-projects-f860a6fa/secure-pdf-backend",
+    "https://secure-pdf-backend.vercel.app"
 ];
 
-app.use(cors({
+const corsOptions = {
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
@@ -35,8 +28,20 @@ app.use(cors({
         }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
-}));
+};
+
+// Handle Preflight Requests explicitly using the same options
+app.options('*', cors(corsOptions));
+
+// Debug Middleware to log requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+    next();
+});
+
+app.use(cors(corsOptions));
 app.use(
     helmet({
         crossOriginResourcePolicy: false,
