@@ -7,6 +7,12 @@ dotenv.config();
 
 const app = express();
 
+// Debug Middleware to log requests
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+    next();
+});
+
 // Middleware
 app.use(cors({
     origin: ["https://secure-pdf-frontend.vercel.app", "http://localhost:5173", "https://vercel.com/harshs-projects-f860a6fa/secure-pdf-backend"],
