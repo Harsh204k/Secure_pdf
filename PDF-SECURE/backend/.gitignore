@@ -1,0 +1,58 @@
+```
+# Init
+.git
+.DS_Store
+
+# Secrets
+config/serviceAccountKey.json
+test_results.txt
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+
+# Editor directories
+.vscode/
+.idea/
+=======
+# Dependencies
+node_modules/
+
+
+
+# Environment
+.env
+config/serviceAccountKey.json
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Coverage
+coverage/
+>>>>>>> 346f2acb384a3d409b54d75d527c9188a3eca5c9
