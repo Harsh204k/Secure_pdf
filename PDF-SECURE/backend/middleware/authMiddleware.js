@@ -1,6 +1,13 @@
-const { admin, db } = require('../config/firebase');
+const { auth, db, firebaseReady, initError } = require('../config/firebase');
 
 const authMiddleware = async (req, res, next) => {
+    if (!firebaseReady || !auth || !db) {
+        return res.status(500).json({
+            message: 'Backend Firebase is not configured. Set FIREBASE_SERVICE_ACCOUNT in the backend environment and redeploy.',
+            error: initError ? initError.message : 'Firebase not initialized'
+        });
+    }
+
     const authHeader = req.headers.authorization;
     
     let token;
@@ -12,7 +19,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     try {
-        const decodedToken = await admin.auth().verifyIdToken(token);
+        const decodedToken = await auth.verifyIdToken(token);
         req.user = decodedToken;
 
         // Check availability strictly against database state

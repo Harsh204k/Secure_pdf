@@ -1,33 +1,50 @@
 const admin = require('firebase-admin');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
 
 dotenv.config();
+
+let initError = null;
 
 // Initialize Firebase Admin
 if (!admin.apps.length) {
     try {
-        let credential;
-        if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-            // Load from Environment Variable (Secure)
-            const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-            credential = admin.credential.cert(serviceAccount);
+        let serviceAccount = null;
+
+        if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+            const json = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8');
+            serviceAccount = JSON.parse(json);
+        } else if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+            // Common on Vercel: JSON is stored with escaped newlines
+            const raw = process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n');
+            serviceAccount = JSON.parse(raw);
         } else {
-            // Fallback to local file (Legacy/Dev)
-            console.warn('FIREBASE_SERVICE_ACCOUNT not set. Attempting to load from file...');
-            const serviceAccount = require('./serviceAccountKey.json');
-            credential = admin.credential.cert(serviceAccount);
+            // Local dev fallback ONLY if file exists (this file is typically not committed)
+            const keyPath = path.join(__dirname, 'serviceAccountKey.json');
+            if (fs.existsSync(keyPath)) {
+                serviceAccount = require(keyPath);
+            }
         }
 
-        admin.initializeApp({
-            credential: credential
-        });
-        console.log('Firebase Admin Initialized');
+        if (!serviceAccount) {
+            initError = new Error(
+                'Firebase Admin not configured. Set FIREBASE_SERVICE_ACCOUNT (JSON) or FIREBASE_SERVICE_ACCOUNT_BASE64 in the backend environment.'
+            );
+        } else {
+            admin.initializeApp({
+                credential: admin.credential.cert(serviceAccount)
+            });
+            console.log('Firebase Admin Initialized');
+        }
     } catch (error) {
+        initError = error;
         console.error('Firebase Admin Initialization Error:', error.message);
     }
 }
 
-const db = admin.firestore();
-const auth = admin.auth();
+const firebaseReady = admin.apps.length > 0;
+const db = firebaseReady ? admin.firestore() : null;
+const auth = firebaseReady ? admin.auth() : null;
 
-module.exports = { admin, db, auth };
+module.exports = { admin, db, auth, firebaseReady, initError };
