@@ -1,16 +1,14 @@
-```
-# Init
-.git
+## OS / tooling
 .DS_Store
 
-# Secrets
+## Dependencies
+node_modules/
+
+## Secrets
 config/serviceAccountKey.json
 test_results.txt
 
-# Dependencies
-node_modules/
-
-# Environment variables
+## Environment variables
 .env
 .env.example
 .env.local
@@ -18,41 +16,16 @@ node_modules/
 .env.test.local
 .env.production.local
 
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage
-coverage/
-
-# Editor directories
-.vscode/
-.idea/
-=======
-# Dependencies
-node_modules/
-
-
-
-# Environment
-.env
-config/serviceAccountKey.json
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+## Logs
 logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Coverage
+## Coverage
 coverage/
->>>>>>> 346f2acb384a3d409b54d75d527c9188a3eca5c9
+
+## Editor directories
+.vscode/
+.idea/
